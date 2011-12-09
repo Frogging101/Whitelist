@@ -51,6 +51,7 @@ public class Whitelist extends JavaPlugin
   private final String PROP_KICKMESSAGE = "kick-message";
   private final String PROP_WHITELIST_ADMINS = "whitelist-admins";
   private final String PROP_DISABLE_LIST = "disable-list-command";
+  private final String PROP_START_ACTIVATED = "activated-on-start";
   private final String PROP_USE_SQL = "sql-enable";
   private final String PROP_SQL_DRIVER_JAR = "sql-driver-jar";
   private final String PROP_SQL_DRIVER = "sql-driver";
@@ -73,6 +74,7 @@ public class Whitelist extends JavaPlugin
   private ArrayList<String> m_SettingsWhitelistAdmins;
   private ArrayList<String> m_SettingsWhitelistAllow;
   private String m_strSettingsKickMessage;
+  private String m_strSettingsActivateOnStart;
   private boolean m_bSettingsListCommandDisabled;
   
   //SQL settings
@@ -149,6 +151,7 @@ public class Whitelist extends JavaPlugin
         propConfig.setProperty(PROP_KICKMESSAGE, "Sorry, you are not on the whitelist!");
         propConfig.setProperty(PROP_WHITELIST_ADMINS, "Name1,Name2,Name3");
         propConfig.setProperty(PROP_DISABLE_LIST, "false");
+        propConfig.setProperty(PROP_START_ACTIVATED,"true");
         //propConfig.setProperty(PROP_USE_SQL, "false");
         //propConfig.setProperty(PROP_SQL_DRIVER_JAR, "./connectors/mysql-connector.jar"
         //propConfig.setProperty(PROP_SQL_DRIVER, "com.mysql.jdbc.Driver");
@@ -292,6 +295,19 @@ public class Whitelist extends JavaPlugin
       Properties propConfig = new Properties();
       BufferedInputStream stream = new BufferedInputStream(new FileInputStream(m_Folder.getAbsolutePath() + File.separator + FILE_CONFIG));
       propConfig.load(stream);
+      m_strSettingsActivateOnStart = propConfig.getProperty(PROP_START_ACTIVATED);
+      if (m_strSettingsActivateOnStart != null)
+      {
+    	  if(m_strSettingsActivateOnStart.compareToIgnoreCase("false") == 0)
+    	  {
+    		  setWhitelistActive(false);
+    		  System.out.println("Whitelist deactivated.");
+    	  }else{
+    		  System.out.println("Whitelist activated.");
+    	  }
+      }else{
+    	  System.out.println("Whitelist: Activate on start not set, activating anyway.");
+      }
       m_strSettingsKickMessage = propConfig.getProperty(PROP_KICKMESSAGE);
       if (m_strSettingsKickMessage == null)
       {
