@@ -35,6 +35,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Timer;
+import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -44,6 +47,9 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
+
+import ru.tehkode.permissions.PermissionManager;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class Whitelist extends JavaPlugin
 {
@@ -69,6 +75,7 @@ public class Whitelist extends JavaPlugin
   private File m_Folder;
   private boolean m_bWhitelistActive;
   private SQLConnection m_SqlConnection;
+  private PermissionManager permissionsm;
   
   //General settings
   private ArrayList<String> m_SettingsWhitelistAdmins;
@@ -111,7 +118,12 @@ public class Whitelist extends JavaPlugin
 
     // Register our events
     PluginManager pm = getServer().getPluginManager();
-
+    if(Bukkit.getServer().getPluginManager().isPluginEnabled("PermissionsEx")){
+        permissionsm = PermissionsEx.getPermissionManager();
+        Logger.getLogger("Minecraft").info("USING PERMISSIONS FOR WHITELIST.");
+    } else {
+       Logger.getLogger("Minecraft").warning("Whitelist: PermissionsEx plugin not found.");
+    }
     pm.registerEvent(Event.Type.PLAYER_LOGIN, m_PlayerListner, Priority.Low, this);
     //pm.registerEvent(Event.Type.PLAYER_COMMAND, m_PlayerListner, Priority.Monitor, this);
 
@@ -306,7 +318,7 @@ public class Whitelist extends JavaPlugin
     		  System.out.println("Whitelist activated.");
     	  }
       }else{
-    	  System.out.println("Whitelist: Activate on start not set, activating anyway.");
+    	  System.out.println("Whitelist: activate-on-start not set, activating by default.");
       }
       m_strSettingsKickMessage = propConfig.getProperty(PROP_KICKMESSAGE);
       if (m_strSettingsKickMessage == null)
@@ -427,6 +439,10 @@ public class Whitelist extends JavaPlugin
         }
       }
     }
+   if (permissionsm.getUser(playerName).has("whitelist.whitelisted","world"))
+   {
+	  return true; 
+   }
     return false;
   }
 
