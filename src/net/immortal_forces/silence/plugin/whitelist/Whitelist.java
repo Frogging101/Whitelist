@@ -42,8 +42,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
@@ -51,7 +50,7 @@ import org.bukkit.plugin.PluginManager;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
-public class Whitelist extends JavaPlugin
+public class Whitelist extends JavaPlugin implements Listener
 {
   //Constants
   private final String PROP_KICKMESSAGE = "kick-message";
@@ -69,7 +68,6 @@ public class Whitelist extends JavaPlugin
   private final String FILE_CONFIG = "whitelist.properties";
 
   //Attributes
-  private final WLPlayerListener m_PlayerListner = new WLPlayerListener(this);
   private FileWatcher m_Watcher;
   private Timer m_Timer;
   private File m_Folder;
@@ -124,7 +122,7 @@ public class Whitelist extends JavaPlugin
     } else {
        Logger.getLogger("Minecraft").warning("Whitelist: PermissionsEx plugin not found.");
     }
-    pm.registerEvent(Event.Type.PLAYER_LOGIN, m_PlayerListner, Priority.Low, this);
+    pm.registerEvents(new WLPlayerListener(this), this);
     //pm.registerEvent(Event.Type.PLAYER_COMMAND, m_PlayerListner, Priority.Monitor, this);
 
     //Create folders and files
