@@ -280,7 +280,7 @@ public class Whitelist extends JavaPlugin implements Listener
       setWhitelistActive(false);
       sender.sendMessage(ChatColor.RED + "Whitelist deactivated!");
       if(isPlayer == true)
-    	  Logger.getLogger("Minecraft").info("Whitelist deactivated by" + sender.getName());
+    	  Logger.getLogger("Minecraft").info("Whitelist deactivated by " + sender.getName());
       return true;
     }
     if (args[0].compareToIgnoreCase("list") == 0)
