@@ -196,6 +196,7 @@ public class Whitelist extends JavaPlugin implements Listener
   public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
   {
     Player player = null;
+    boolean isPlayer = false;
     try
     {
       player = (Player)sender;
@@ -206,12 +207,16 @@ public class Whitelist extends JavaPlugin implements Listener
 
     if ( player != null )
     {
+    	isPlayer = true;
       if ( !isAdmin(player.getName()) )
+      {
         return true;
+      }
     }
     
     if ( args.length < 1 )
     {
+    
       return false;
     }
     if ( args[0].compareToIgnoreCase("help") == 0 )
@@ -265,13 +270,17 @@ public class Whitelist extends JavaPlugin implements Listener
     if (args[0].compareToIgnoreCase("on") ==0)
     {
       setWhitelistActive(true);
-      sender.sendMessage(ChatColor.GREEN + "Whitelist activated!");
+      sender.sendMessage(ChatColor.GREEN + "Whitelist activated! ");
+      if(isPlayer == true)
+    	  Logger.getLogger("Minecraft").info("Whitelist activated by " + sender.getName());
       return true;
     }
     if (args[0].compareToIgnoreCase("off") ==0)
     {
       setWhitelistActive(false);
       sender.sendMessage(ChatColor.RED + "Whitelist deactivated!");
+      if(isPlayer == true)
+    	  Logger.getLogger("Minecraft").info("Whitelist deactivated by" + sender.getName());
       return true;
     }
     if (args[0].compareToIgnoreCase("list") == 0)

@@ -22,6 +22,7 @@
 package net.immortal_forces.silence.plugin.whitelist;
 
 //import org.bukkit.event.player.PlayerChatEvent;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -63,7 +64,7 @@ public class WLPlayerListener implements Listener
     }
   }
 
-  /*@Override
+  /*@EventHandler(priority = EventPriority.MONITOR)
   public void onPlayerCommand(PlayerChatEvent event)
   {
     //commands:
